@@ -194,6 +194,38 @@ describe SexpExtensions::DefsNode do
   end
 end
 
+describe SexpExtensions::CallNode do
+  context 'with no parameters' do
+    before :each do
+      @node = s(:call, nil, :hello)
+      @node.extend(SexpExtensions::CallNode)
+    end
+    it 'has no parameter names' do
+      @node.parameter_names.should == nil
+    end
+  end
+
+  context 'with 1 literal parameter' do
+    before :each do
+      @node = s(:call, nil, :hello, s(:lit, :param))
+      @node.extend(SexpExtensions::CallNode)
+    end
+    it 'has 1 argument name' do
+      @node.arg_names.should == [:param]
+    end
+  end
+
+  context 'with 2 literal parameters' do
+    before :each do
+      @node = s(:call, nil, :hello, s(:lit, :x), s(:lit, :y))
+      @node.extend(SexpExtensions::CallNode)
+    end
+    it 'has 2 argument names' do
+      @node.arg_names.should == [:x, :y]
+    end
+  end
+end
+
 describe SexpExtensions::IterNode do
   context 'with no parameters' do
     before :each do

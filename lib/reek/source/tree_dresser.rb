@@ -69,9 +69,9 @@ module Reek
       module CallNode
         def receiver() self[1] end
         def method_name() self[2] end
-        def args() self[3] end
+        def args() self[3..-1] end
         def arg_names
-          args[1..-1].map {|arg| arg[1]}
+          args.map {|arg| arg[1]}
         end
       end
 
