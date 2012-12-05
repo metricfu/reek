@@ -84,19 +84,10 @@ module Reek
 
       module MethodNode
         def arg_names
-          unless @args
-            @args = argslist[1..-1].reject {|param| Sexp === param or param.to_s =~ /^&/}
-          end
-          @args
-        end
-        def parameters()
-          unless @params
-            @params = argslist.reject {|param| Sexp === param}
-          end
-          @params
+          @args ||= parameter_names.reject {|param| param.to_s =~ /^&/}
         end
         def parameter_names
-          parameters[1..-1]
+          @param_names ||= argslist[1..-1].map { |param| Sexp === param ?  param[1] : param }
         end
       end
 
