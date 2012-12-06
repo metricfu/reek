@@ -140,11 +140,19 @@ module Reek
         stmts.length - ignore
       end
 
+      def self.count_method_statements(exp)
+        stmts = exp[3..-1]
+        ignore = 0
+        ignore += 1 if stmts[1] == s(:nil)
+        stmts.length - ignore
+      end
+
     private
 
       def handle_context(klass, type, exp)
         scope = klass.new(@element, exp)
         push(scope) do
+          @element.count_statements(CodeParser.count_method_statements(exp))
           process_default(exp)
           check_smells(type)
         end
