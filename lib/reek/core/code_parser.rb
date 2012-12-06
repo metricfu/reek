@@ -110,7 +110,7 @@ module Reek
       end
 
       def process_when(exp)
-        count_clause(exp[2])
+        @element.count_statements(CodeParser.count_statements(exp[2..-1].compact))
         process_default(exp)
       end
 
