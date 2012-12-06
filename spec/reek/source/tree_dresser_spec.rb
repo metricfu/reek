@@ -229,7 +229,7 @@ end
 describe SexpExtensions::IterNode do
   context 'with no parameters' do
     before :each do
-      @node = s(:iter, s(), nil, s())
+      @node = s(:iter, s(), s(:args), s())
       @node.extend(SexpExtensions::IterNode)
     end
     it 'has no parameter names' do
@@ -239,7 +239,7 @@ describe SexpExtensions::IterNode do
 
   context 'with 1 parameter' do
     before :each do
-      @node = s(:iter, s(), s(:lasgn, :param), s())
+      @node = s(:iter, s(), s(:args, :param), s())
       @node.extend(SexpExtensions::IterNode)
     end
     it 'has 1 parameter name' do
@@ -249,10 +249,10 @@ describe SexpExtensions::IterNode do
 
   context 'with 2 parameters' do
     before :each do
-      @node = s(:iter, s(), s(:masgn, s(:array, s(:lasgn, :x), s(:lasgn, :y))), s())
+      @node = s(:iter, s(), s(:args, :x, :y), s())
       @node.extend(SexpExtensions::IterNode)
     end
-    it 'has 2 parameter name' do
+    it 'has 2 parameter names' do
       @node.parameter_names.should == [:x, :y]
     end
   end

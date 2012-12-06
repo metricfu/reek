@@ -124,15 +124,7 @@ module Reek
         def block() self[3] end
         def parameters() self[2] || [] end
         def parameter_names
-          result = parameters
-          return case result[0]
-          when :lasgn
-            [result[1]]
-          when :masgn
-            result[1][1..-1].map {|lasgn| lasgn[1]}
-          else
-            []
-          end
+          parameters[1..-1].to_a
         end
       end
 
