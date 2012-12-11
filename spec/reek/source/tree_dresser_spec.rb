@@ -114,6 +114,22 @@ describe SexpExtensions::DefnNode do
       @node.full_name('').should == 'hello'
     end
   end
+
+  context 'with a body with 2 statements' do
+    before :each do
+      @node = s(:defn, :hello, s(:args), s(:first), s(:second))
+      @node.extend(SexpExtensions::DefnNode)
+    end
+
+    it 'has 2 body statements' do
+      @node.body.should == s(s(:first), s(:second))
+    end
+
+    it 'has a body extended with SexpNode' do
+      b = @node.body
+      (class << b; self; end).ancestors.first.should == SexpNode
+    end
+  end
 end
 
 describe SexpExtensions::DefsNode do
@@ -190,6 +206,22 @@ describe SexpExtensions::DefsNode do
     end
     it 'includes no marker in its full name with empty outer scope' do
       @node.full_name('').should == 'obj.hello'
+    end
+  end
+
+  context 'with a body with 2 statements' do
+    before :each do
+      @node = s(:defs, s(:self), :hello, s(:args), s(:first), s(:second))
+      @node.extend(SexpExtensions::DefsNode)
+    end
+
+    it 'has 2 body statements' do
+      @node.body.should == s(s(:first), s(:second))
+    end
+
+    it 'has a body extended with SexpNode' do
+      b = @node.body
+      (class << b; self; end).ancestors.first.should == SexpNode
     end
   end
 end
