@@ -79,6 +79,8 @@ module Reek
         case exp.first
           when :class, :module
             assignment_nodes += exp.each_node(:iasgn, [:class, :module])
+          when :defs, :defn
+            assignment_nodes += exp.body.each_node(:args, [:defs, :defn])
         end
         result = Hash.new {|hash, key| hash[key] = []}
         assignment_nodes.each {|asgn| result[asgn[1]].push(asgn.line) }
