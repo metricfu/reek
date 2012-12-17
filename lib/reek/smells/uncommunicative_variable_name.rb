@@ -76,14 +76,21 @@ module Reek
 
       def variable_names(exp)
         assignment_nodes = exp.each_node(:lasgn, [:class, :module, :defs, :defn])
+        args_nodes = []
+
         case exp.first
           when :class, :module
             assignment_nodes += exp.each_node(:iasgn, [:class, :module])
           when :defs, :defn
-            assignment_nodes += exp.body.each_node(:args, [:defs, :defn])
+            args_nodes = exp.body.each_node(:args, [:defs, :defn])
         end
+
         result = Hash.new {|hash, key| hash[key] = []}
         assignment_nodes.each {|asgn| result[asgn[1]].push(asgn.line) }
+        args_nodes.each do |args_node|
+          args_node[1..-1].each {|var| result[var].push(args_node.line) }
+        end
+
         result
       end
     end

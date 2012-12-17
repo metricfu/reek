@@ -80,6 +80,17 @@ EOS
       src.should smell_of(UncommunicativeVariableName,
         {UncommunicativeVariableName::VARIABLE_NAME_KEY => 'x'})
     end
+
+    it "reports all relevant block parameters" do
+      src = <<-EOS
+        def bad
+          @foo.map { |x, y| x + y }
+        end
+      EOS
+      src.should smell_of(UncommunicativeVariableName,
+                          {UncommunicativeVariableName::VARIABLE_NAME_KEY => 'x'},
+                          {UncommunicativeVariableName::VARIABLE_NAME_KEY => 'y'})
+    end
   end
 
   context 'when a smell is reported' do
