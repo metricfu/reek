@@ -81,6 +81,7 @@ module Reek
         case exp.first
           when :class, :module
             assignment_nodes += exp.each_node(:iasgn, [:class, :module])
+            args_nodes = exp.each_node(:args, [:class, :module, :defs, :defn])
           when :defs, :defn
             args_nodes = exp.body.each_node(:args, [:defs, :defn])
         end

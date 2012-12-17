@@ -91,6 +91,16 @@ EOS
                           {UncommunicativeVariableName::VARIABLE_NAME_KEY => 'x'},
                           {UncommunicativeVariableName::VARIABLE_NAME_KEY => 'y'})
     end
+
+    it "reports block parameters used outside of methods" do
+      src = <<-EOS
+      class Foo
+        @foo.map { |x| x * 2 }
+      end
+      EOS
+      src.should smell_of(UncommunicativeVariableName,
+                          {UncommunicativeVariableName::VARIABLE_NAME_KEY => 'x'})
+    end
   end
 
   context 'when a smell is reported' do
