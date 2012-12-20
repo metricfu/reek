@@ -177,6 +177,17 @@ describe LongMethod, 'does not count control statements' do
     method.num_statements.should == 0
   end
 
+  it 'counts 1 statement in a block' do
+    method = process_method('def one() fred.each do; callee(); end; end')
+    method.num_statements.should == 1
+  end
+
+  # FIXME: I think this is wrong, but it specs current behavior.
+  it 'counts 4 statements in a block' do
+    method = process_method('def one() fred.each do; callee(); callee(); callee(); end; end')
+    method.num_statements.should == 4
+  end
+
   it 'counts else statement' do
     src = <<EOS
 def parse(arg, argv, &error)
