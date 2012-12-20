@@ -144,7 +144,7 @@ module Reek
       def handle_context(klass, type, exp)
         scope = klass.new(@element, exp)
         push(scope) do
-          @element.count_statements(CodeParser.count_statements(exp[3..-1]))
+          @element.count_statements(CodeParser.count_statements(exp.body))
           process_default(exp)
           check_smells(type)
         end

@@ -13,6 +13,12 @@ def process_method(src)
   Core::CodeParser.new(sniffer).process_defn(source.syntax_tree)
 end
 
+def process_singleton_method(src)
+  source = src.to_reek_source
+  sniffer = Core::Sniffer.new(source)
+  Core::CodeParser.new(sniffer).process_defs(source.syntax_tree)
+end
+
 describe LongMethod do
   it 'should not report short methods' do
     src = 'def short(arga) alf = f(1);@bet = 2;@cut = 3;@dit = 4; @emp = 5;end'
@@ -186,6 +192,11 @@ describe LongMethod, 'does not count control statements' do
   it 'counts 4 statements in a block' do
     method = process_method('def one() fred.each do; callee(); callee(); callee(); end; end')
     method.num_statements.should == 4
+  end
+
+  it 'counts 1 statement in a singleton method' do
+    method = process_singleton_method('def self.foo; callee(); end')
+    method.num_statements.should == 1
   end
 
   it 'counts else statement' do
