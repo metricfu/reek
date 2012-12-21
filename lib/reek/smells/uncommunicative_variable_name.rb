@@ -75,37 +75,51 @@ module Reek
       end
 
       def variable_names(exp)
+        result = Hash.new {|hash, key| hash[key] = []}
+        find_assignment_variable_names(exp, result)
+        find_block_argument_variable_names(exp, result)
+        result
+      end
+
+      def find_assignment_variable_names(exp, accumulator)
         assignment_nodes = exp.each_node(:lasgn, [:class, :module, :defs, :defn])
-        args_nodes = []
 
         case exp.first
           when :class, :module
             assignment_nodes += exp.each_node(:iasgn, [:class, :module])
-            arg_search_exp = exp
-          when :defs, :defn
-            arg_search_exp = exp.body
         end
+
+        assignment_nodes.each {|asgn| accumulator[asgn[1]].push(asgn.line) }
+      end
+
+      def find_block_argument_variable_names(exp, accumulator)
+        arg_search_exp = case exp.first
+                         when :class, :module
+                           exp
+                         when :defs, :defn
+                           exp.body
+                         end
 
         args_nodes = arg_search_exp.each_node(:args, [:class, :module, :defs, :defn])
 
-        result = Hash.new {|hash, key| hash[key] = []}
-
-        assignment_nodes.each {|asgn| result[asgn[1]].push(asgn.line) }
-
         args_nodes.each do |args_node|
-          args_node[1..-1].each do |subexp|
-            if subexp.is_a? Symbol
-              var = subexp.to_s.sub(/^\*/, '').to_sym
-              result[var].push(args_node.line)
-            else
-              subexp[1..-1].each do |subvar|
-                result[subvar].push(args_node.line)
-              end
-            end
+          recursively_record_variable_names(accumulator, args_node)
+        end
+      end
+
+      def recursively_record_variable_names(accumulator, exp)
+        exp[1..-1].each do |subexp|
+          if subexp.is_a? Symbol
+            record_variable_name(exp, subexp, accumulator)
+          elsif subexp.first == :masgn
+            recursively_record_variable_names(accumulator, subexp)
           end
         end
+      end
 
-        result
+      def record_variable_name(exp, symbol, accumulator)
+        var = symbol.to_s.sub(/^\*/, '').to_sym
+        accumulator[var].push(exp.line)
       end
     end
   end
