@@ -81,19 +81,27 @@ module Reek
         case exp.first
           when :class, :module
             assignment_nodes += exp.each_node(:iasgn, [:class, :module])
-            args_nodes = exp.each_node(:args, [:class, :module, :defs, :defn])
+            arg_search_exp = exp
           when :defs, :defn
-            args_nodes = exp.body.each_node(:args, [:defs, :defn])
+            arg_search_exp = exp.body
         end
+
+        args_nodes = arg_search_exp.each_node(:args, [:class, :module, :defs, :defn])
 
         result = Hash.new {|hash, key| hash[key] = []}
 
         assignment_nodes.each {|asgn| result[asgn[1]].push(asgn.line) }
 
         args_nodes.each do |args_node|
-          args_node[1..-1].each do |var|
-            stripped_var = var.to_s.sub(/^\*/, '').to_sym
-            result[stripped_var].push(args_node.line)
+          args_node[1..-1].each do |subexp|
+            if subexp.is_a? Symbol
+              var = subexp.to_s.sub(/^\*/, '').to_sym
+              result[var].push(args_node.line)
+            else
+              subexp[1..-1].each do |subvar|
+                result[subvar].push(args_node.line)
+              end
+            end
           end
         end
 
