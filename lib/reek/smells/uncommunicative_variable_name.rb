@@ -87,9 +87,14 @@ module Reek
         end
 
         result = Hash.new {|hash, key| hash[key] = []}
+
         assignment_nodes.each {|asgn| result[asgn[1]].push(asgn.line) }
+
         args_nodes.each do |args_node|
-          args_node[1..-1].each {|var| result[var].push(args_node.line) }
+          args_node[1..-1].each do |var|
+            stripped_var = var.to_s.sub(/^\*/, '').to_sym
+            result[stripped_var].push(args_node.line)
+          end
         end
 
         result
