@@ -1,8 +1,7 @@
-require 'reek/core/code_parser'
+require 'sexp_dresser/core/code_parser'
 require 'reek/core/smell_repository'
 require 'reek/source/config_file'
 require 'yaml'
-require 'reek/core/hash_extensions'
 
 module Reek
   module Core
@@ -24,7 +23,7 @@ module Reek
       end
 
       def report_on(listener)
-        CodeParser.new(self).process(@source.syntax_tree)
+        SexpDresser::Core::CodeParser.new(self).process(@source.syntax_tree)
         @smell_repository.report_on(listener)
       end
 

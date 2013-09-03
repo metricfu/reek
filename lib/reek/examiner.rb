@@ -1,6 +1,6 @@
 require 'reek/core/sniffer'
 require 'reek/core/warning_collector'
-require 'reek/source/source_repository'
+require 'sexp_dresser/source/source_repository'
 
 module Reek
 
@@ -28,7 +28,7 @@ module Reek
     #   each of which is opened and parsed for source code.
     #
     def initialize(source, config_files = [])
-      sources = Source::SourceRepository.parse(source)
+      sources = SexpDresser::Source::SourceRepository.parse(source)
       @description = sources.description
       collector = Core::WarningCollector.new
       sources.each { |src| Core::Sniffer.new(src, config_files).report_on(collector) }

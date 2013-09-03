@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'reek/smells/attribute'
-require 'reek/core/module_context'
+require 'sexp_dresser/core/module_context'
 require 'reek/smells/smell_detector_shared'
 
 include Reek::Core

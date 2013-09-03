@@ -1,16 +1,16 @@
 require 'reek/smells/smell_detector'
 require 'reek/smell_warning'
-require 'reek/source/reference_collector'
+require 'sexp_dresser/source/reference_collector'
 
 module Reek
   module Smells
 
-    # 
+    #
     # A Utility Function is any instance method that has no
     # dependency on the state of the instance.
-    # 
+    #
     # Currently +UtilityFunction+ will warn about any method that:
-    # 
+    #
     # * is non-empty, and
     # * does not override an inherited method, and
     # * calls at least one method on another object, and
@@ -74,7 +74,7 @@ module Reek
     private
 
       def depends_on_instance?(exp)
-        Reek::Source::ReferenceCollector.new(exp).num_refs_to_self > 0
+        SexpDresser::Source::ReferenceCollector.new(exp).num_refs_to_self > 0
       end
 
       def num_helper_methods(method_ctx)

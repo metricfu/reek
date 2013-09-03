@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'reek/smells/repeated_conditional'
-require 'reek/core/code_context'
+require 'sexp_dresser/core/code_context'
 require 'reek/smells/smell_detector_shared'
 
 include Reek::Core

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'reek/smells/too_many_instance_variables'
 require 'reek/examiner'
-require 'reek/core/code_parser'
+require 'sexp_dresser/core/code_parser'
 require 'reek/smells/smell_detector_shared'
 
 include Reek

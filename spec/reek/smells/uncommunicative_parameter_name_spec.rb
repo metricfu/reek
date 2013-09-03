@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'reek/smells/uncommunicative_parameter_name'
 require 'reek/smells/smell_detector_shared'
-require 'reek/core/method_context'
+require 'sexp_dresser/core/method_context'
 
 include Reek::Core
 include Reek::Smells

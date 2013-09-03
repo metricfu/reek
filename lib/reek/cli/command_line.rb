@@ -4,7 +4,7 @@ require 'reek/cli/reek_command'
 require 'reek/cli/help_command'
 require 'reek/cli/version_command'
 require 'reek/cli/yaml_command'
-require 'reek/source'
+require 'sexp_dresser/source'
 
 module Reek
   module Cli
@@ -107,7 +107,7 @@ EOB
         if @argv.empty?
           return [$stdin.to_reek_source('$stdin')]
         else
-          return Source::SourceLocator.new(@argv).all_sources
+          return SexpDresser::Source::SourceLocator.new(@argv).all_sources
         end
       end
     end

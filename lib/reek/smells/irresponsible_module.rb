@@ -1,6 +1,6 @@
 require 'reek/smells/smell_detector'
 require 'reek/smell_warning'
-require 'reek/source/code_comment'
+require 'sexp_dresser/source/code_comment'
 
 module Reek
   module Smells
@@ -30,7 +30,7 @@ module Reek
       # @return [Array<SmellWarning>]
       #
       def examine_context(ctx)
-        comment = Source::CodeComment.new(ctx.exp.comments)
+        comment = SexpDresser::Source::CodeComment.new(ctx.exp.comments)
         return [] if self.class.descriptive[ctx.full_name] ||= comment.is_descriptive?
         smell = SmellWarning.new(SMELL_CLASS, ctx.full_name, [ctx.exp.line],
           'has no descriptive comment',

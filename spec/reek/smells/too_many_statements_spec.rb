@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'reek/smells/too_many_statements'
-require 'reek/core/code_parser'
+require 'sexp_dresser/core/code_parser'
 require 'reek/core/sniffer'
 require 'reek/smells/smell_detector_shared'
 
